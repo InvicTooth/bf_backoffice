@@ -5,11 +5,11 @@ interface NavProps {
 export default function TopNav({isLoggedIn}: NavProps) {
   const menus = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' }
+    // { name: 'About', path: '/about' },
+    // { name: 'Contact', path: '/contact' }
   ];
   const loggedInMenus = [
-    { name: 'Profile', path: '/profile' },
+    { name: 'Profile', path: '/auth/profile' },
     { name: 'Sign Out', path: '/signout' },
   ];
   const nonLoggedInMenus = [

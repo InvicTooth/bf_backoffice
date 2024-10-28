@@ -15,7 +15,8 @@ export async function handler(
     return ctx.next();
   }
 
-  const { data, error } = await supabaseClient.auth.getUser(supabaseCredentials);
+  const { error } = await supabaseClient.auth.getUser(supabaseCredentials);
+  
   if (error) {
     console.log(error.message);
     ctx.state.token = null;

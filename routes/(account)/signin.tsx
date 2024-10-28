@@ -1,10 +1,9 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { supabaseClient } from "../supabaseClient.ts";
-import type { AuthState } from "./_middleware.ts";
+import { supabaseClient } from "../../supabaseClient.ts";
 import { setCookie } from '$std/http/cookie.ts';
 
 export const handler: Handlers = {
-  async POST(req, ctx) {
+  async POST(req, _ctx) {
     const form = await req.formData();
     const email = form.get("email") as string;
     const password = form.get("password") as string;

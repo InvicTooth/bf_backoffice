@@ -2,33 +2,43 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
+import * as $_account_layout from "./routes/(account)/_layout.tsx";
+import * as $_account_signin from "./routes/(account)/signin.tsx";
+import * as $_account_signout from "./routes/(account)/signout.tsx";
+import * as $_account_signup from "./routes/(account)/signup.tsx";
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
+import * as $_layout from "./routes/_layout.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
+import * as $admin_layout from "./routes/admin/_layout.tsx";
+import * as $admin_middleware from "./routes/admin/_middleware.ts";
+import * as $admin_index from "./routes/admin/index.tsx";
 import * as $api_joke from "./routes/api/joke.ts";
 import * as $auth_middleware from "./routes/auth/_middleware.ts";
-import * as $auth_secret from "./routes/auth/secret.tsx";
+import * as $auth_profile from "./routes/auth/profile.tsx";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
-import * as $signin from "./routes/signin.tsx";
-import * as $signout from "./routes/signout.tsx";
-import * as $signup from "./routes/signup.tsx";
 import * as $Counter from "./islands/Counter.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
+    "./routes/(account)/_layout.tsx": $_account_layout,
+    "./routes/(account)/signin.tsx": $_account_signin,
+    "./routes/(account)/signout.tsx": $_account_signout,
+    "./routes/(account)/signup.tsx": $_account_signup,
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
+    "./routes/_layout.tsx": $_layout,
     "./routes/_middleware.ts": $_middleware,
+    "./routes/admin/_layout.tsx": $admin_layout,
+    "./routes/admin/_middleware.ts": $admin_middleware,
+    "./routes/admin/index.tsx": $admin_index,
     "./routes/api/joke.ts": $api_joke,
     "./routes/auth/_middleware.ts": $auth_middleware,
-    "./routes/auth/secret.tsx": $auth_secret,
+    "./routes/auth/profile.tsx": $auth_profile,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
-    "./routes/signin.tsx": $signin,
-    "./routes/signout.tsx": $signout,
-    "./routes/signup.tsx": $signup,
   },
   islands: {
     "./islands/Counter.tsx": $Counter,
