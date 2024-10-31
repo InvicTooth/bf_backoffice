@@ -12,7 +12,11 @@ import * as $_layout from "./routes/_layout.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
 import * as $admin_layout from "./routes/admin/_layout.tsx";
 import * as $admin_middleware from "./routes/admin/_middleware.ts";
+import * as $admin_characters_id_ from "./routes/admin/characters/[id].tsx";
+import * as $admin_characters_index from "./routes/admin/characters/index.tsx";
 import * as $admin_index from "./routes/admin/index.tsx";
+import * as $admin_stories_id_ from "./routes/admin/stories/[id].tsx";
+import * as $admin_stories_index from "./routes/admin/stories/index.tsx";
 import * as $api_joke from "./routes/api/joke.ts";
 import * as $auth_middleware from "./routes/auth/_middleware.ts";
 import * as $auth_profile from "./routes/auth/profile.tsx";
@@ -33,7 +37,11 @@ const manifest = {
     "./routes/_middleware.ts": $_middleware,
     "./routes/admin/_layout.tsx": $admin_layout,
     "./routes/admin/_middleware.ts": $admin_middleware,
+    "./routes/admin/characters/[id].tsx": $admin_characters_id_,
+    "./routes/admin/characters/index.tsx": $admin_characters_index,
     "./routes/admin/index.tsx": $admin_index,
+    "./routes/admin/stories/[id].tsx": $admin_stories_id_,
+    "./routes/admin/stories/index.tsx": $admin_stories_index,
     "./routes/api/joke.ts": $api_joke,
     "./routes/auth/_middleware.ts": $auth_middleware,
     "./routes/auth/profile.tsx": $auth_profile,

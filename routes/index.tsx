@@ -1,9 +1,10 @@
 import { PageProps } from "$fresh/server.ts";
 
 export default function Home(props: PageProps) {
+  console.log('index page\n');
   return (
     <div class="mt-10 px-5 mx-auto flex max-w-screen-md flex-col justify-center">
-      {props.state.token ?
+      {props.state.session ?
         (
           <div class="mx-auto text-center">
             <h1 class="text-2xl font-bold mb-5">Nice! you're signed in</h1>

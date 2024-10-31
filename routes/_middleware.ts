@@ -1,11 +1,9 @@
 import { FreshContext } from "$fresh/server.ts";
-import { supabaseClient } from "../supabaseClient.ts"
+import { supabase } from "../supabase/supabase.ts"
 import { getCookies } from "$std/http/cookie.ts";
-
-export interface AuthState {
-  token: string | null;
-}
-
+import type { AuthState } from "../components/providers/AuthState.ts";
+import { delay } from "$std/async/delay.ts";
+let x = 1;
 export async function handler(
   req: Request,
   ctx: FreshContext<AuthState>,
@@ -14,15 +12,14 @@ export async function handler(
   if (!supabaseCredentials) {
     return ctx.next();
   }
-
-  const { error } = await supabaseClient.auth.getUser(supabaseCredentials);
   
+  const { data, error } = await supabase.auth.getSession();
   if (error) {
-    console.log(error.message);
-    ctx.state.token = null;
+    console.log(error?.message);
+    ctx.state.session = null;
   } else {
-    ctx.state.token = supabaseCredentials;
+    ctx.state.session = data.session;
   }
-
-  return await ctx.next();
+  console.log(`middleware root ${x++}`);
+  return ctx.next();
 }

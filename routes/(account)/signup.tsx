@@ -1,14 +1,13 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { supabaseClient } from "../../supabaseClient.ts";
-import type { AuthState } from "../_middleware.ts";
+import { supabase } from "../../supabase/supabase.ts";
 
-export const handler: Handlers<AuthState> = {
+export const handler: Handlers = {
   async POST(req, _ctx) {
     const form = await req.formData();
     const email = form.get('email') as string;
     const password = form.get('password') as string;
 
-    const { error } = await supabaseClient.auth.signUp({ email, password });
+    const { error } = await supabase.auth.signUp({ email, password });
     
     const headers = new Headers();
 

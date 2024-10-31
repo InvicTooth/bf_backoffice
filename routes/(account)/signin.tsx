@@ -1,5 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { supabaseClient } from "../../supabaseClient.ts";
+import { supabase } from "../../supabase/supabase.ts";
 import { setCookie } from '$std/http/cookie.ts';
 
 export const handler: Handlers = {
@@ -8,7 +8,7 @@ export const handler: Handlers = {
     const email = form.get("email") as string;
     const password = form.get("password") as string;
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     const headers = new Headers();
 
@@ -34,6 +34,7 @@ export const handler: Handlers = {
 }
 
 export default function SignIn(props: PageProps) {
+  console.log('signin page\n');
   const err = props.url.searchParams.get("error");
 
   return (

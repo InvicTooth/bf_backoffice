@@ -1,4 +1,5 @@
 import { type PageProps } from "$fresh/server.ts";
+import { Partial } from "$fresh/runtime.ts";
 export default function App({ Component }: PageProps) {
   return (
     <html>
@@ -8,8 +9,10 @@ export default function App({ Component }: PageProps) {
         <title>BerrFlex BackOffice</title>
         <link rel="stylesheet" href="/styles.css" />
       </head>
-      <body>
-        <Component />
+      <body f-client-nav>
+        <Partial name="body">
+          <Component />
+        </Partial>
       </body>
     </html>
   );

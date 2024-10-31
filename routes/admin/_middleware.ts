@@ -1,27 +1,29 @@
 import { FreshContext } from "$fresh/server.ts";
-import { supabaseClient } from "../../supabaseClient.ts"
-import { AuthState } from '../_middleware.ts';
+import type { AuthState } from "../../components/providers/AuthState.ts";
 
-export async function handler(
+
+export function handler(
   _req: Request,
   ctx: FreshContext<AuthState>,
 ) {
+  
   const headers = new Headers();
-  headers.set('location', '/signin');
-
-  if (!ctx.state.token) {
+  headers.set('location', '/');
+  // console.log(JSON.stringify(ctx.state?.session?.user));
+  if (!ctx.state?.session) {
     return new Response(null, {
       status: 303,
       headers,
     });
   }
-  const { error } = await supabaseClient.auth.getUser(ctx.state.token);
 
-  if (error) {
+  const user = ctx.state.session?.user;
+  if ((user.email != 'pjhkaka@gmail.com') && (user.email != '0lovedodam0@gmail.com')) {
     return new Response(null, {
       status: 303,
       headers,
     });
   }
+console.log('middleware admin');
   return ctx.next();
 }
