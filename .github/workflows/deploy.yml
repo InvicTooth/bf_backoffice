@@ -26,7 +26,7 @@ jobs:
       - name: Build step
         env: 
             SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-            SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+            SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: "deno task build"
 
       - name: Upload to Deno Deploy
