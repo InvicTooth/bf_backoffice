@@ -68,3 +68,4 @@ jobs:
         with:
           project: "pp-greeting-cards-platform"
           entrypoint: "./main.ts"
+          
