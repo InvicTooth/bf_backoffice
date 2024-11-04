@@ -14,8 +14,13 @@ export const handler: Handlers = {
 
     if (data.session) {
       setCookie(headers, {
-        name: 'supabaseCredentials',
+        name: 'supabase_access_token',
         value: data.session?.access_token,
+        maxAge: data.session?.expires_in,
+      });
+      setCookie(headers, {
+        name: 'supabase_refresh_token',
+        value: data.session?.refresh_token,
         maxAge: data.session?.expires_in,
       });
     }
@@ -34,7 +39,6 @@ export const handler: Handlers = {
 }
 
 export default function SignIn(props: PageProps) {
-  console.log('signin page\n');
   const err = props.url.searchParams.get("error");
 
   return (

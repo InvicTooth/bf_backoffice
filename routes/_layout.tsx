@@ -3,7 +3,6 @@ import { Head } from "$fresh/runtime.ts";
 import TopNav from "../components/TopNav.tsx";
 
 export default function Layout(props: PageProps) {
-  console.log('layout root');
   return (
     <>
       <Head><title>BerryFlex BackOffice</title></Head>

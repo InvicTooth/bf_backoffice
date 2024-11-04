@@ -17,12 +17,15 @@ import * as $admin_characters_index from "./routes/admin/characters/index.tsx";
 import * as $admin_index from "./routes/admin/index.tsx";
 import * as $admin_stories_id_ from "./routes/admin/stories/[id].tsx";
 import * as $admin_stories_index from "./routes/admin/stories/index.tsx";
+import * as $api_admin_stories_id_ from "./routes/api/admin/stories/[id].ts";
+import * as $api_admin_stories_index from "./routes/api/admin/stories/index.ts";
 import * as $api_joke from "./routes/api/joke.ts";
 import * as $auth_middleware from "./routes/auth/_middleware.ts";
 import * as $auth_profile from "./routes/auth/profile.tsx";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
-import * as $Counter from "./islands/Counter.tsx";
+import * as $admin_CharacterEditor from "./islands/admin/CharacterEditor.tsx";
+import * as $admin_StoryEditor from "./islands/admin/StoryEditor.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -42,6 +45,8 @@ const manifest = {
     "./routes/admin/index.tsx": $admin_index,
     "./routes/admin/stories/[id].tsx": $admin_stories_id_,
     "./routes/admin/stories/index.tsx": $admin_stories_index,
+    "./routes/api/admin/stories/[id].ts": $api_admin_stories_id_,
+    "./routes/api/admin/stories/index.ts": $api_admin_stories_index,
     "./routes/api/joke.ts": $api_joke,
     "./routes/auth/_middleware.ts": $auth_middleware,
     "./routes/auth/profile.tsx": $auth_profile,
@@ -49,7 +54,8 @@ const manifest = {
     "./routes/index.tsx": $index,
   },
   islands: {
-    "./islands/Counter.tsx": $Counter,
+    "./islands/admin/CharacterEditor.tsx": $admin_CharacterEditor,
+    "./islands/admin/StoryEditor.tsx": $admin_StoryEditor,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;

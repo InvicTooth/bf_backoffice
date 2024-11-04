@@ -1,12 +1,11 @@
 import { FreshContext } from "$fresh/server.ts";
-import type { AuthState } from "../../components/providers/AuthState.ts";
+import type { AuthState } from "../../providers/AuthState.ts";
 
 
 export function handler(
   _req: Request,
   ctx: FreshContext<AuthState>,
 ) {
-  
   const headers = new Headers();
   headers.set('location', '/');
   // console.log(JSON.stringify(ctx.state?.session?.user));
@@ -17,13 +16,12 @@ export function handler(
     });
   }
 
-  const user = ctx.state.session?.user;
+  const user = ctx.state.session.user;
   if ((user.email != 'pjhkaka@gmail.com') && (user.email != '0lovedodam0@gmail.com')) {
     return new Response(null, {
       status: 303,
       headers,
     });
   }
-console.log('middleware admin');
   return ctx.next();
 }
