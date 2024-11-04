@@ -32,3 +32,4 @@ jobs:
           project: "bfbackoffice"
           entrypoint: "main.ts"
           root: "."
+
