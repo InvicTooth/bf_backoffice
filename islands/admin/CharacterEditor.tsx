@@ -1,33 +1,32 @@
 import { useSignal } from "@preact/signals";
 
-export default function CharacterEditor({ story }: any) {
-  const storySignal = useSignal(story);
+export default function CharacterEditor({ character }:any) {
+  const characterSignal = useSignal({ ...character });
   const thumbnailFile = useSignal<File | null>(null);
   const endingImageFile = useSignal<File | null>(null);
-  const scenes = useSignal<{image:string, imageFile:File, texts:string[]}[]>([]);
+  const scenes = useSignal<{image:string, imageFile:File, texts:string[]}[]>([...character?.content?.scenes]);
   const loading = useSignal(false);
   const error = useSignal<string | null>(null);
-  
 
-  const saveStory = async () => {
+  const savecharacter = async () => {
     try {
       loading.value = true;
       error.value = null;
       const formData = new FormData();
       // 기본 데이터
-      const storyData = {
-        title: storySignal.value.title,
+      const characterData = {
+        title: characterSignal.value.title,
         content: {
-          thumbnail : storySignal.value.content.thumbnail,
+          thumbnail: !thumbnailFile.value ? characterSignal.value.content.thumbnail : '',
           scenes: scenes.value.map(scene => ({
-            image: '',
+            image: !scene.imageFile ? scene.image : '',
             texts: scene.texts
           })),
-          endingImage : storySignal.value.content.endingImage
-        }
+          endingImage: !endingImageFile.value ? characterSignal.value.content?.endingImage : ''
+        },
       };
-      formData.append("storyData", JSON.stringify(storyData));
-
+      formData.append("characterData", JSON.stringify(characterData));
+      console.log(JSON.stringify(characterData));
       // 이미지 파일들 추가
       if (thumbnailFile.value)
         formData.append("thumbnail", thumbnailFile.value);
@@ -43,20 +42,19 @@ export default function CharacterEditor({ story }: any) {
       });
 
       // API 호출
-      const url = story?.id ? `/api/stories/${story.id}` : "/api/stories";
-      const method = story?.id ? "PUT" : "POST";
+      const url = character?.id ? `/api/admin/stories/${character.id}` : "/api/admin/stories";
+      const method = character?.id ? "PUT" : "POST";
       
       const response = await fetch(url, {
         method,
         body: formData
       });
-
       const result = await response.json();
       
       if (!response.ok) throw new Error(result.error);
 
       // 성공 후 리디렉션
-      // globalThis.location.href = "/admin/stories";
+      globalThis.location.href = `/admin/stories/`;
     } catch (err:any) {
       error.value = err.message;
     } finally {
@@ -64,15 +62,34 @@ export default function CharacterEditor({ story }: any) {
     }
   };
 
+  const deletecharacter = async () => {
+    if (!character?.id) return;
+    if (!confirm("정말로 이 스토리를 삭제하시겠습니까?")) return;
+    try {
+      loading.value = true;
+            
+      const response = await fetch(`/api/admin/stories/${character.id}`, { method: "DELETE" });
+
+      const result = await response.json();
+      console.log(result);
+      if (!response.ok) throw new Error(result.error);
+      globalThis.location.href = `/admin/stories/`;
+    } catch (err: any) {
+      error.value = err.message;
+    } finally {
+      loading.value = false;
+    }
+  }
+
   // 썸네일 이미지 처리
   const handleThumbnailUpload = (e: Event) => {
     const input = e.target as HTMLInputElement;
     if (!input.files?.[0]) return;
     const file = input.files[0];
     thumbnailFile.value = file;
-    const newStory = { ...storySignal.value };
-    newStory.content.thumbnail = URL.createObjectURL(file);
-    storySignal.value = newStory;
+    const newcharacter = { ...characterSignal.value };
+    newcharacter.content.thumbnail = URL.createObjectURL(file);
+    characterSignal.value = newcharacter;
   };
 
   // 씬 이미지 다중 선택 처리
@@ -95,11 +112,16 @@ export default function CharacterEditor({ story }: any) {
     if (!input.files?.[0]) return;
     const file = input.files[0];
     endingImageFile.value = file;
-    const newStory = { ...storySignal.value };
-    newStory.content.endingImage = URL.createObjectURL(file);
-    storySignal.value = newStory;
+    const newcharacter = { ...characterSignal.value };
+    newcharacter.content.endingImage = URL.createObjectURL(file);
+    characterSignal.value = newcharacter;
   };
 
+  const removeScene = (sceIndex: number) => {
+    const newScenes = [...scenes.value];
+    newScenes.splice(sceIndex, 1);
+    scenes.value = newScenes;
+  }
 
   // 특정 씬에 텍스트 추가
   const addTextToScene = (sceneIndex: number) => {
@@ -141,8 +163,8 @@ export default function CharacterEditor({ story }: any) {
           <label class="block text-sm font-medium mb-2">동화 제목</label>
           <input
             type="text"
-            value={storySignal.value.title}
-            onInput={(e) => storySignal.value.title = ((e.target as HTMLInputElement).value)}
+            value={characterSignal.value.title}
+            onInput={(e) => characterSignal.value.title = ((e.target as HTMLInputElement).value)}
             class="w-full p-2 border rounded"
           />
         </div>
@@ -164,8 +186,8 @@ export default function CharacterEditor({ story }: any) {
             >
               썸네일 선택
             </label>
-            {storySignal.value.content?.thumbnail && (
-              <img src={storySignal.value.content?.thumbnail} alt="썸네일 미리보기" class="w-24 h-24 object-cover rounded" />
+            {characterSignal.value.content?.thumbnail && (
+              <img src={characterSignal.value.content?.thumbnail} alt="썸네일 미리보기" class="w-24 h-24 object-cover rounded" />
             )}
           </div>
         </div>
@@ -205,6 +227,12 @@ export default function CharacterEditor({ story }: any) {
               {/* 텍스트 입력 영역 */}
               <div class="flex-grow space-y-4">
                 <div class="flex justify-between items-center">
+                  <button
+                      onClick={() => removeScene(sceneIndex)}
+                      class="text-red-600 hover:text-red-700"
+                    >
+                      x
+                    </button>
                   <h3 class="font-medium">씬 {sceneIndex + 1} 텍스트</h3>
                   <button
                     onClick={() => addTextToScene(sceneIndex)}
@@ -258,20 +286,30 @@ export default function CharacterEditor({ story }: any) {
             >
               결말 이미지 선택
             </label>
-            {storySignal.value.content?.endingImage && (
-              <img src={storySignal.value.content?.endingImage} alt="결말 이미지 미리보기" class="w-24 h-24 object-cover rounded" />
+            {characterSignal.value.content?.endingImage && (
+              <img src={characterSignal.value.content?.endingImage} alt="결말 이미지 미리보기" class="w-24 h-24 object-cover rounded" />
             )}
           </div>
         </div>
+
         {/* 저장 버튼 추가 */}
         <div class="flex justify-end">
           <button
-            onClick={saveStory}
+            onClick={savecharacter}
             disabled={loading.value}
             class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading.value ? "저장 중..." : (story?.id ? "수정하기" : "저장하기")}
+            {loading.value ? "저장 중..." : (character?.id ? "수정하기" : "저장하기")}
           </button>
+          
+          {character?.id && <button
+            onClick={deletecharacter}
+            disabled={loading.value}
+            class="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-4 disabled:opacity-50"
+          >
+            {loading.value ? "저장 중..." : "삭제하기"}
+          </button>}
+          
         </div>
       </div>
     </div>

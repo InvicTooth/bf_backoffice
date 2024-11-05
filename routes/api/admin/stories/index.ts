@@ -20,7 +20,7 @@ export const handler: Handlers = {
       // 썸네일 업로드
       if (thumbnailFile?.size > 0) {
         const thumbnail = await uploadToStorage(thumbnailFile, 'stories', dateTimePath);
-        storyData.content.thumbnail = thumbnail;
+        storyData.content.thumbnailUrl = thumbnail;
       }
 
       // 씬 이미지 업로드
@@ -32,7 +32,7 @@ export const handler: Handlers = {
         sceneFiles.forEach((_file, index) => {
           const sceneIndex = parseInt(formData.get(`sceneIndex_${index}`) as string);
           if (sceneUrls[index]) {
-            storyData.content.scenes[sceneIndex].image = sceneUrls[index];
+            storyData.content.scenes[sceneIndex].imageUrl = sceneUrls[index];
           }
         });
       }
@@ -40,7 +40,7 @@ export const handler: Handlers = {
       // 결말 이미지 업로드
       if (endingFile?.size > 0) {
         const endingImage = await uploadToStorage(endingFile, 'stories', dateTimePath);
-        storyData.content.endingImage = endingImage;
+        storyData.content.endingImageUrl = endingImage;
       }
 
       // DB에 저장

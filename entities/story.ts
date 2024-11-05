@@ -1,11 +1,11 @@
 export type Story = {
   content: {
-    thumbnail: string;
+    thumbnailUrl: string;
     scenes: {
-      image: string,
+      imageUrl: string,
       texts: string[]
     }[];
-    endingImage: string;
+    endingImageUrl: string;
   } | null;
   id: number | null;
   metadata: Record<string, never> | null;

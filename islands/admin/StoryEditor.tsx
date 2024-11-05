@@ -1,11 +1,18 @@
 import { useSignal } from "@preact/signals";
-import { supabase } from "../../supabase/supabase.ts";
+import { Story } from "../../entities/story.ts";
 
-export default function StoryEditor({ story, characters }:any) {
-  const storySignal = useSignal({ ...story });
+export default function StoryEditor({ story, characters }: { story: Story, characters: { id: number, name: string }[] }) {
+  const title = useSignal(story?.title ?? '');
+  const thumbnailUrl = useSignal(story?.content?.thumbnailUrl ?? '');
   const thumbnailFile = useSignal<File | null>(null);
+  const endingImageUrl = useSignal(story?.content?.endingImageUrl ?? '');
   const endingImageFile = useSignal<File | null>(null);
-  const scenes = useSignal<{image:string, imageFile:File, texts:string[]}[]>([...story?.content?.scenes]);
+  const scenes = useSignal<{ imageUrl: string, imageFile: File | null, texts: string[] }[]>(story?.content?.scenes.map(scene => ({
+    imageUrl: scene?.imageUrl,
+    imageFile: null,
+    texts: scene.texts
+  })) || []);
+  const unlockable_character_id = useSignal(story?.unlockable_character_id ?? "");
   const loading = useSignal(false);
   const error = useSignal<string | null>(null);
 
@@ -15,17 +22,19 @@ export default function StoryEditor({ story, characters }:any) {
       error.value = null;
       const formData = new FormData();
       // 기본 데이터
-      const storyData = {
-        title: storySignal.value.title,
+      const storyData: Story = {
+        id: story?.id ?? null,
+        title: title.value,
         content: {
-          thumbnail: !thumbnailFile.value ? storySignal.value.content.thumbnail : '',
-          scenes: scenes.value.map(scene => ({
-            image: !scene.imageFile ? scene.image : '',
+          thumbnailUrl: !thumbnailFile.value ? thumbnailUrl.value : '',
+          scenes: scenes.value?.map(scene => ({
+            imageUrl: !scene.imageFile ? scene.imageUrl : '',
             texts: scene.texts
           })),
-          endingImage: !endingImageFile.value ? storySignal.value.content?.endingImage : ''
+          endingImageUrl: !endingImageFile.value ? endingImageUrl.value : '',
         },
-        unlockable_character_id: storySignal.value.unlockable_character_id,
+        metadata: {},
+        unlockable_character_id: unlockable_character_id.value == "" ? null : unlockable_character_id.value as number,
       };
       formData.append("storyData", JSON.stringify(storyData));
       console.log(JSON.stringify(storyData));
@@ -89,9 +98,7 @@ export default function StoryEditor({ story, characters }:any) {
     if (!input.files?.[0]) return;
     const file = input.files[0];
     thumbnailFile.value = file;
-    const newStory = { ...storySignal.value };
-    newStory.content.thumbnail = URL.createObjectURL(file);
-    storySignal.value = newStory;
+    thumbnailUrl.value = URL.createObjectURL(file);
   };
 
   // 씬 이미지 다중 선택 처리
@@ -101,7 +108,7 @@ export default function StoryEditor({ story, characters }:any) {
 
     const files = Array.from(input.files);
     const newScenes = files.map((file) => ({
-      image: URL.createObjectURL(file),
+      imageUrl: URL.createObjectURL(file),
       imageFile: file,
       texts: [""]
     }));
@@ -114,16 +121,12 @@ export default function StoryEditor({ story, characters }:any) {
     if (!input.files?.[0]) return;
     const file = input.files[0];
     endingImageFile.value = file;
-    const newStory = { ...storySignal.value };
-    newStory.content.endingImage = URL.createObjectURL(file);
-    storySignal.value = newStory;
+    endingImageUrl.value = URL.createObjectURL(file);
   };
 
   const handleUnlockableCharacterChange = (e: Event) => {
     const target = e.target as HTMLSelectElement;
-    const newStory = { ...storySignal.value };
-    newStory.unlockable_character_id = target.value;
-    storySignal.value = newStory;
+    unlockable_character_id.value = parseInt(target.value);
   }
 
   const removeScene = (sceIndex: number) => {
@@ -151,7 +154,6 @@ export default function StoryEditor({ story, characters }:any) {
     const newScenes = [ ...scenes.value ];
     newScenes[sceneIndex].texts.splice(textIndex, 1);
     scenes.value = newScenes;
-    
   };
 
   if (loading.value) {
@@ -172,8 +174,8 @@ export default function StoryEditor({ story, characters }:any) {
           <label class="block text-sm font-medium mb-2">동화 제목</label>
           <input
             type="text"
-            value={storySignal.value.title}
-            onInput={(e) => storySignal.value.title = ((e.target as HTMLInputElement).value)}
+            value={title.value}
+            onInput={(e) => title.value = ((e.target as HTMLInputElement).value)}
             class="w-full p-2 border rounded"
           />
         </div>
@@ -195,8 +197,8 @@ export default function StoryEditor({ story, characters }:any) {
             >
               썸네일 선택
             </label>
-            {storySignal.value.content?.thumbnail && (
-              <img src={storySignal.value.content?.thumbnail} alt="썸네일 미리보기" class="w-24 h-24 object-cover rounded" />
+            {thumbnailUrl.value.length > 0 && (
+              <img src={thumbnailUrl.value} alt="썸네일 미리보기" class="w-24 h-24 object-cover rounded" />
             )}
           </div>
         </div>
@@ -227,7 +229,7 @@ export default function StoryEditor({ story, characters }:any) {
               {/* 씬 이미지 */}
               <div class="w-64 flex-shrink-0">
                 <img
-                  src={scene.image}
+                  src={scene.imageUrl}
                   alt={`씬 ${sceneIndex + 1}`}
                   class="w-full h-48 object-cover rounded"
                 />
@@ -295,18 +297,18 @@ export default function StoryEditor({ story, characters }:any) {
             >
               결말 이미지 선택
             </label>
-            {storySignal.value.content?.endingImage && (
-              <img src={storySignal.value.content?.endingImage} alt="결말 이미지 미리보기" class="w-24 h-24 object-cover rounded" />
+            {endingImageUrl.value.length > 0 && (
+              <img src={endingImageUrl.value} alt="결말 이미지 미리보기" class="w-24 h-24 object-cover rounded" />
             )}
           </div>
         </div>
 
         <div>
           <label class="block text-sm font-medium mb-2" for="unlockable_character">해제 가능한 캐릭터</label>
-          <select id="unlockable_character" onChange={handleUnlockableCharacterChange} value={storySignal.value.unlockable_character_id} class="w-full p-2 border rounded">
+          <select id="unlockable_character" onChange={handleUnlockableCharacterChange} value={unlockable_character_id.value} class="w-full p-2 border rounded">
             <option value="" selected>미선택</option>
-            {(characters as {id:string, name:string}[])?.map((character) => 
-              <option value={character.id}>{character.name}</option>
+            {(characters)?.map((character) => 
+              <option value={character?.id ?? ""}>{character?.name}</option>
             )}
           </select>
         </div>

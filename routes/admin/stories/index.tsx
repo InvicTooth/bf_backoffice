@@ -4,7 +4,10 @@ import Stories from "../../../components/admin/StoriesList.tsx";
 import { supabase } from "../../../supabase/supabase.ts";
 
 export default defineRoute(async (_req, _ctx) => {
-  const { data } = await supabase.from("stories").select("id, title").order('id', { ascending: false });
+  const { data } = await supabase
+    .from("stories")
+    .select("id, title")
+    .order('id', { ascending: false });
 
   return (
     <>
