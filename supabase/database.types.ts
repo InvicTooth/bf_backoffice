@@ -16,6 +16,7 @@ export type Database = {
           id: number
           metadata: Json | null
           name: string
+          small_avatar_url: string | null
           updated_at: string | null
         }
         Insert: {
@@ -24,6 +25,7 @@ export type Database = {
           id?: number
           metadata?: Json | null
           name: string
+          small_avatar_url?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -32,6 +34,7 @@ export type Database = {
           id?: number
           metadata?: Json | null
           name?: string
+          small_avatar_url?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -124,24 +127,30 @@ export type Database = {
       stories: {
         Row: {
           content: Json | null
+          created_at: string
           id: number
           metadata: Json | null
           title: string
           unlockable_character_id: number | null
+          updated_at: string
         }
         Insert: {
           content?: Json | null
+          created_at?: string
           id?: number
           metadata?: Json | null
           title: string
           unlockable_character_id?: number | null
+          updated_at?: string
         }
         Update: {
           content?: Json | null
+          created_at?: string
           id?: number
           metadata?: Json | null
           title?: string
           unlockable_character_id?: number | null
+          updated_at?: string
         }
         Relationships: [
           {

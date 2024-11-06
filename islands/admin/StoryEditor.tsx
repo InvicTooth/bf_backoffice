@@ -72,15 +72,12 @@ export default function StoryEditor({ id, story, characters }: { id: string, sto
   };
 
   const deleteStory = async () => {
-    if (!id) return;
+    if (id == 'new') return;
     if (!confirm("정말로 이 스토리를 삭제하시겠습니까?")) return;
     try {
       loading.value = true;
-            
       const response = await fetch(`/api/admin/stories/${id}`, { method: "DELETE" });
-
       const result = await response.json();
-      console.log(result);
       if (!response.ok) throw new Error(result.error);
       globalThis.location.href = `/admin/stories/`;
     } catch (err: any) {
@@ -321,7 +318,7 @@ export default function StoryEditor({ id, story, characters }: { id: string, sto
             {loading.value ? "저장 중..." : (id != 'new' ? "수정하기" : "저장하기")}
           </button>
           
-          {id && <button
+          {id != 'new' && <button
             onClick={deleteStory}
             disabled={loading.value}
             class="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-4 disabled:opacity-50"

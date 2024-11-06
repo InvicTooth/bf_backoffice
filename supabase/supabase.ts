@@ -19,7 +19,7 @@ export async function uploadToStorage(file: File, bucket:string, path: string) {
   if (error) throw error;
 
   const { data: { publicUrl } } = supabase.storage
-    .from("stories")
+    .from(bucket)
     .getPublicUrl(`${path}/${filename}`);
 
   // return `${path}/${filename}`;

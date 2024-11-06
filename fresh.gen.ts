@@ -17,6 +17,8 @@ import * as $admin_characters_index from "./routes/admin/characters/index.tsx";
 import * as $admin_index from "./routes/admin/index.tsx";
 import * as $admin_stories_id_ from "./routes/admin/stories/[id].tsx";
 import * as $admin_stories_index from "./routes/admin/stories/index.tsx";
+import * as $api_admin_characters_id_ from "./routes/api/admin/characters/[id].ts";
+import * as $api_admin_characters_index from "./routes/api/admin/characters/index.ts";
 import * as $api_admin_stories_id_ from "./routes/api/admin/stories/[id].ts";
 import * as $api_admin_stories_index from "./routes/api/admin/stories/index.ts";
 import * as $api_joke from "./routes/api/joke.ts";
@@ -45,6 +47,8 @@ const manifest = {
     "./routes/admin/index.tsx": $admin_index,
     "./routes/admin/stories/[id].tsx": $admin_stories_id_,
     "./routes/admin/stories/index.tsx": $admin_stories_index,
+    "./routes/api/admin/characters/[id].ts": $api_admin_characters_id_,
+    "./routes/api/admin/characters/index.ts": $api_admin_characters_index,
     "./routes/api/admin/stories/[id].ts": $api_admin_stories_id_,
     "./routes/api/admin/stories/index.ts": $api_admin_stories_index,
     "./routes/api/joke.ts": $api_joke,

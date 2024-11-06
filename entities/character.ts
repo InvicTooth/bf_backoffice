@@ -1,4 +1,5 @@
 export type Character = {
   name:string;
-  avatarUrl: string;
+  avatar_url: string;
+  small_avatar_url: string;
 } | null;

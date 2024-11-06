@@ -64,7 +64,7 @@ export const handler: Handlers = {
       const toDelete: string[] = [];
       if (oldData?.content?.thumbnailUrl &&
         oldData?.content?.thumbnailUrl != newData?.content?.thumbnailUrl)
-        toDelete.push(oldData?.content?.thumbnailUrl);
+        toDelete.push(getStorageRelativeUrl('stories', oldData?.content?.thumbnailUrl));
       const oldScenes = oldData?.content?.scenes
         .map((scene) => getStorageRelativeUrl('stories', scene.imageUrl)) || [];
       const newScenes = newData?.content?.scenes
@@ -72,7 +72,7 @@ export const handler: Handlers = {
       toDelete.push(...oldScenes.filter(scene => !newScenes.includes(scene)));
       if (oldData?.content?.endingImageUrl &&
         oldData?.content?.endingImageUrl != newData?.content?.endingImageUrl)
-        toDelete.push(oldData?.content?.endingImageUrl);
+        toDelete.push(getStorageRelativeUrl('stories', oldData?.content?.endingImageUrl));
       await supabase.storage.from('stories').remove(toDelete);
 
       if (error) throw error;
