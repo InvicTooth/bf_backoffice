@@ -9,14 +9,12 @@ export default defineRoute(async (_req, ctx) => {
   const storiesListResponse = await supabase.from("stories").select("id, title").order('id', { ascending: false });
   const stories = storiesListResponse?.data;
   let story: Story = {
-    id: null,
     title: "",
     content: {
       thumbnailUrl: '',
       endingImageUrl: '',
       scenes: []
     },
-    metadata: null,
     unlockable_character_id: null
   };
   if (ctx.params.id != 'new') {
@@ -37,7 +35,7 @@ export default defineRoute(async (_req, ctx) => {
       <Stories stories={stories}></Stories>
       <div class="flex flex-col flex-grow overflow-auto">
         <AdminTopBar ></AdminTopBar>
-        <StoryEditor story={story} characters={characters} key={story?.id || 'new'} />
+        <StoryEditor id={ctx.params.id} story={story} characters={characters} key={ctx.params.id} />
       </div>
     </>
   );

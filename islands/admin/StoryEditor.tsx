@@ -1,7 +1,7 @@
 import { useSignal } from "@preact/signals";
 import { Story } from "../../entities/story.ts";
 
-export default function StoryEditor({ story, characters }: { story: Story, characters: { id: number, name: string }[] }) {
+export default function StoryEditor({ id, story, characters }: { id: string, story: Story, characters: { id: number, name: string }[] }) {
   const title = useSignal(story?.title ?? '');
   const thumbnailUrl = useSignal(story?.content?.thumbnailUrl ?? '');
   const thumbnailFile = useSignal<File | null>(null);
@@ -23,7 +23,6 @@ export default function StoryEditor({ story, characters }: { story: Story, chara
       const formData = new FormData();
       // 기본 데이터
       const storyData: Story = {
-        id: story?.id ?? null,
         title: title.value,
         content: {
           thumbnailUrl: !thumbnailFile.value ? thumbnailUrl.value : '',
@@ -33,11 +32,10 @@ export default function StoryEditor({ story, characters }: { story: Story, chara
           })),
           endingImageUrl: !endingImageFile.value ? endingImageUrl.value : '',
         },
-        metadata: {},
         unlockable_character_id: unlockable_character_id.value == "" ? null : unlockable_character_id.value as number,
       };
       formData.append("storyData", JSON.stringify(storyData));
-      console.log(JSON.stringify(storyData));
+
       // 이미지 파일들 추가
       if (thumbnailFile.value)
         formData.append("thumbnail", thumbnailFile.value);
@@ -53,8 +51,8 @@ export default function StoryEditor({ story, characters }: { story: Story, chara
       });
 
       // API 호출
-      const url = story?.id ? `/api/admin/stories/${story.id}` : "/api/admin/stories";
-      const method = story?.id ? "PUT" : "POST";
+      const url = id != 'new' ? `/api/admin/stories/${id}` : "/api/admin/stories";
+      const method = id != 'new' ? "PUT" : "POST";
       
       const response = await fetch(url, {
         method,
@@ -74,12 +72,12 @@ export default function StoryEditor({ story, characters }: { story: Story, chara
   };
 
   const deleteStory = async () => {
-    if (!story?.id) return;
+    if (!id) return;
     if (!confirm("정말로 이 스토리를 삭제하시겠습니까?")) return;
     try {
       loading.value = true;
             
-      const response = await fetch(`/api/admin/stories/${story.id}`, { method: "DELETE" });
+      const response = await fetch(`/api/admin/stories/${id}`, { method: "DELETE" });
 
       const result = await response.json();
       console.log(result);
@@ -320,10 +318,10 @@ export default function StoryEditor({ story, characters }: { story: Story, chara
             disabled={loading.value}
             class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading.value ? "저장 중..." : (story?.id ? "수정하기" : "저장하기")}
+            {loading.value ? "저장 중..." : (id != 'new' ? "수정하기" : "저장하기")}
           </button>
           
-          {story?.id && <button
+          {id && <button
             onClick={deleteStory}
             disabled={loading.value}
             class="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-4 disabled:opacity-50"

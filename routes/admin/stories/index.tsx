@@ -1,6 +1,6 @@
 import { defineRoute } from "$fresh/server.ts";
 import AdminTopBar from "../../../components/admin/AdminTopBar.tsx";
-import Stories from "../../../components/admin/StoriesList.tsx";
+import StoriesList from "../../../components/admin/StoriesList.tsx";
 import { supabase } from "../../../supabase/supabase.ts";
 
 export default defineRoute(async (_req, _ctx) => {
@@ -11,7 +11,7 @@ export default defineRoute(async (_req, _ctx) => {
 
   return (
     <>
-      <Stories stories={data}></Stories>
+      <StoriesList stories={data}></StoriesList>
       <div class="flex flex-col flex-grow">
         <AdminTopBar></AdminTopBar>
         <div class="flex-grow p-6 overflow-auto bg-gray-200">

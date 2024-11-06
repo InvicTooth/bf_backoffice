@@ -46,21 +46,32 @@ export const handler: Handlers = {
       }
 
       // DB 업데이트
-      let { data, error } = await supabase.from('stories').select('*').eq('id', id).single()!;
+      let { data, error } = await supabase
+        .from('stories')
+        .select('*')
+        .eq('id', id)
+        .single()!;
       const oldData = { ...data } as Story;
 
-      ({ data, error } = await supabase.from("stories").update(storyData).eq("id", id).select().single());
+      ({ data, error } = await supabase
+        .from("stories")
+        .update(storyData)
+        .eq("id", id)
+        .select()
+        .single());
       const newData = { ...data } as Story;
       // 이전 파일 삭제
       const toDelete: string[] = [];
-      if (oldData?.content?.thumbnailUrl && oldData?.content?.thumbnailUrl != newData?.content?.thumbnailUrl)
+      if (oldData?.content?.thumbnailUrl &&
+        oldData?.content?.thumbnailUrl != newData?.content?.thumbnailUrl)
         toDelete.push(oldData?.content?.thumbnailUrl);
       const oldScenes = oldData?.content?.scenes
         .map((scene) => getStorageRelativeUrl('stories', scene.imageUrl)) || [];
       const newScenes = newData?.content?.scenes
         .map((scene) => getStorageRelativeUrl('stories', scene.imageUrl)) || [];
       toDelete.push(...oldScenes.filter(scene => !newScenes.includes(scene)));
-      if (oldData?.content?.endingImageUrl && oldData?.content?.endingImageUrl != newData?.content?.endingImageUrl)
+      if (oldData?.content?.endingImageUrl &&
+        oldData?.content?.endingImageUrl != newData?.content?.endingImageUrl)
         toDelete.push(oldData?.content?.endingImageUrl);
       await supabase.storage.from('stories').remove(toDelete);
 
@@ -76,7 +87,12 @@ export const handler: Handlers = {
   async DELETE(_req, ctx) {
     const id = ctx.params.id;
     try {
-      const { data, error } = await supabase.from('stories').delete().eq('id', id).select().single();
+      const { data, error } = await supabase
+        .from('stories')
+        .delete()
+        .eq('id', id)
+        .select()
+        .single();
       if (error)
         throw error;
       const story = data as Story;

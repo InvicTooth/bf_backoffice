@@ -1,4 +1,4 @@
-export default function CharactersList(characters:{id:number, name:string}[]) {
+export default function CharactersList({ characters }: { characters: { id: number, name: string }[] | null }) {
   return (
     <div class="flex flex-col w-56 border-r border-gray-300">
       <button class="relative text-sm focus:outline-none group">
@@ -15,7 +15,7 @@ export default function CharactersList(characters:{id:number, name:string}[]) {
         </div>
       </button>
       <div class="flex flex-col flex-grow p-4 overflow-auto">
-        {characters.map((character) => (
+        {characters?.map((character) => (
           <a class="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href={`/admin/characters/${character.id}`}>
             <span class="leading-none">{character.name}</span>
           </a>

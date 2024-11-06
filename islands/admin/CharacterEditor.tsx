@@ -1,10 +1,8 @@
 import { useSignal } from "@preact/signals";
+import { Character } from "../../entities/character.ts";
 
-export default function CharacterEditor({ character }:any) {
-  const characterSignal = useSignal({ ...character });
+export default function CharacterEditor({ character }:{character:Character}) {
   const thumbnailFile = useSignal<File | null>(null);
-  const endingImageFile = useSignal<File | null>(null);
-  const scenes = useSignal<{image:string, imageFile:File, texts:string[]}[]>([...character?.content?.scenes]);
   const loading = useSignal(false);
   const error = useSignal<string | null>(null);
 
@@ -14,7 +12,7 @@ export default function CharacterEditor({ character }:any) {
       error.value = null;
       const formData = new FormData();
       // 기본 데이터
-      const characterData = {
+      const characterData: Character = {
         title: characterSignal.value.title,
         content: {
           thumbnail: !thumbnailFile.value ? characterSignal.value.content.thumbnail : '',
