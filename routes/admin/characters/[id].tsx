@@ -12,6 +12,12 @@ export default defineRoute(async (_req, ctx) => {
     name: "",
     avatar_url: '',
     small_avatar_url: '',
+    metadata: {
+        model: 'gpt-4o-mini',
+        provider: 'openai',
+        kakaoBotId: '',
+        assistantId: '',
+      }
   };
   if (ctx.params.id != 'new') {
     const { data } = await supabase
@@ -19,7 +25,7 @@ export default defineRoute(async (_req, ctx) => {
       .select('*')
       .eq('id', ctx.params.id)
       .single();
-    if (data) character = data as Character;
+    if (data) character = data as unknown as Character;
   }
   return (
     <>

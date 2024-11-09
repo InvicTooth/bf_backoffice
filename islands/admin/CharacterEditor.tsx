@@ -7,6 +7,8 @@ export default function CharacterEditor({ id, character }: { id: string, charact
   const avatarUrl = useSignal(character?.avatar_url ?? '');
   const smallAvatarFile = useSignal<File | null>(null);
   const smallAvatarUrl = useSignal(character?.small_avatar_url ?? '');
+  const assistantId = useSignal(character?.metadata?.assistantId);
+  const kakaoBotId = useSignal(character?.metadata?.kakaoBotId);
   const loading = useSignal(false);
   const error = useSignal<string | null>(null);
 
@@ -20,6 +22,12 @@ export default function CharacterEditor({ id, character }: { id: string, charact
         name: name.value ?? '',
         avatar_url: !avatarFile.value ? avatarUrl.value : '',
         small_avatar_url: !smallAvatarFile.value ? smallAvatarUrl.value : '',
+        metadata: {
+          model: 'gpt-4o-mini',
+          provider: 'openai',
+          kakaoBotId: assistantId.value ?? '',
+          assistantId: kakaoBotId.value ?? '',
+        }
       };
       formData.append("characterData", JSON.stringify(characterData));
       console.log(JSON.stringify(characterData));
@@ -104,6 +112,28 @@ export default function CharacterEditor({ id, character }: { id: string, charact
             type="text"
             value={name.value}
             onInput={(e) => name.value = ((e.target as HTMLInputElement).value)}
+            class="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* openai 어시스턴트 id */}
+        <div>
+          <label class="block text-sm font-medium mb-2">openai 어시스턴트 id</label>
+          <input
+            type="text"
+            value={assistantId.value}
+            onInput={(e) => assistantId.value = ((e.target as HTMLInputElement).value)}
+            class="w-full p-2 border rounded"
+          />
+        </div>
+
+        {/* 카카오 봇 id */}
+        <div>
+          <label class="block text-sm font-medium mb-2">카카오 봇 id</label>
+          <input
+            type="text"
+            value={kakaoBotId.value}
+            onInput={(e) => kakaoBotId.value = ((e.target as HTMLInputElement).value)}
             class="w-full p-2 border rounded"
           />
         </div>
