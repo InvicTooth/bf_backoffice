@@ -25,8 +25,8 @@ export default function CharacterEditor({ id, character }: { id: string, charact
         metadata: {
           model: 'gpt-4o-mini',
           provider: 'openai',
-          kakaoBotId: assistantId.value ?? '',
-          assistantId: kakaoBotId.value ?? '',
+          kakaoBotId: kakaoBotId.value ?? '',
+          assistantId: assistantId.value ?? '',
         }
       };
       formData.append("characterData", JSON.stringify(characterData));
