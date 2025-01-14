@@ -47,8 +47,8 @@ export type Database = {
           id: number
           is_user: boolean | null
           metadata: Json | null
+          profile_id: number | null
           thread_id: number | null
-          user_id: string | null
         }
         Insert: {
           character_id?: number | null
@@ -57,8 +57,8 @@ export type Database = {
           id?: number
           is_user?: boolean | null
           metadata?: Json | null
+          profile_id?: number | null
           thread_id?: number | null
-          user_id?: string | null
         }
         Update: {
           character_id?: number | null
@@ -67,8 +67,8 @@ export type Database = {
           id?: number
           is_user?: boolean | null
           metadata?: Json | null
+          profile_id?: number | null
           thread_id?: number | null
-          user_id?: string | null
         }
         Relationships: [
           {
@@ -79,48 +79,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "messages_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "messages_thread_id_fkey"
             columns: ["thread_id"]
             isOneToOne: false
             referencedRelation: "threads"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "messages_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       profiles: {
         Row: {
-          avatar_url: string | null
-          created_at: string
-          email: string | null
-          full_name: string | null
-          id: string
-          updated_at: string
-          user_name: string | null
+          avatar: string | null
+          created_at: string | null
+          id: number
+          is_deleted: boolean
+          name: string | null
+          updated_at: string | null
+          user_id: string
         }
         Insert: {
-          avatar_url?: string | null
-          created_at?: string
-          email?: string | null
-          full_name?: string | null
-          id: string
-          updated_at?: string
-          user_name?: string | null
+          avatar?: string | null
+          created_at?: string | null
+          id?: number
+          is_deleted?: boolean
+          name?: string | null
+          updated_at?: string | null
+          user_id: string
         }
         Update: {
-          avatar_url?: string | null
-          created_at?: string
-          email?: string | null
-          full_name?: string | null
-          id?: string
-          updated_at?: string
-          user_name?: string | null
+          avatar?: string | null
+          created_at?: string | null
+          id?: number
+          is_deleted?: boolean
+          name?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -169,8 +169,8 @@ export type Database = {
           id: number
           last_message: string | null
           metadata: Json | null
+          profile_id: number | null
           updated_at: string | null
-          user_id: string | null
         }
         Insert: {
           character_id?: number | null
@@ -178,8 +178,8 @@ export type Database = {
           id?: number
           last_message?: string | null
           metadata?: Json | null
+          profile_id?: number | null
           updated_at?: string | null
-          user_id?: string | null
         }
         Update: {
           character_id?: number | null
@@ -187,8 +187,8 @@ export type Database = {
           id?: number
           last_message?: string | null
           metadata?: Json | null
+          profile_id?: number | null
           updated_at?: string | null
-          user_id?: string | null
         }
         Relationships: [
           {
@@ -199,8 +199,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "threads_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "threads_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -209,19 +209,19 @@ export type Database = {
       }
       user_acquired_characters: {
         Row: {
-          acquired_at: string | null
+          acquired_at: string
           character_id: number
-          user_id: string
+          profile_id: number
         }
         Insert: {
-          acquired_at?: string | null
+          acquired_at?: string
           character_id: number
-          user_id: string
+          profile_id: number
         }
         Update: {
-          acquired_at?: string | null
+          acquired_at?: string
           character_id?: number
-          user_id?: string
+          profile_id?: number
         }
         Relationships: [
           {
@@ -232,8 +232,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_acquired_characters_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "user_acquired_characters_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -242,33 +242,33 @@ export type Database = {
       }
       user_completed_stories: {
         Row: {
-          completed_at: string | null
+          completed_at: string
+          profile_id: number
           story_id: number
-          user_id: string
         }
         Insert: {
-          completed_at?: string | null
+          completed_at?: string
+          profile_id: number
           story_id: number
-          user_id: string
         }
         Update: {
-          completed_at?: string | null
+          completed_at?: string
+          profile_id?: number
           story_id?: number
-          user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "user_completed_stories_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_completed_stories_story_id_fkey"
             columns: ["story_id"]
             isOneToOne: false
             referencedRelation: "stories"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_completed_stories_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

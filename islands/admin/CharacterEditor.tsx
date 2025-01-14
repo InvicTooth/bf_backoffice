@@ -107,7 +107,7 @@ export default function CharacterEditor({ id, character }: { id: string, charact
       {/* 캐릭터 이름 */}
       <div class="space-y-6">
         <div>
-          <label class="block text-sm font-medium mb-2">캐릭터 이름</label>
+          <label class="block text-xl font-bold mb-2">캐릭터 이름</label>
           <input
             type="text"
             value={name.value}
@@ -117,8 +117,8 @@ export default function CharacterEditor({ id, character }: { id: string, charact
         </div>
 
         {/* openai 어시스턴트 id */}
-        <div>
-          <label class="block text-sm font-medium mb-2">openai 어시스턴트 id</label>
+        <div class="border-t-4 pt-4">
+          <label class="block text-xl font-bold mb-2">openai 어시스턴트 id</label>
           <input
             type="text"
             value={assistantId.value}
@@ -128,8 +128,8 @@ export default function CharacterEditor({ id, character }: { id: string, charact
         </div>
 
         {/* 카카오 봇 id */}
-        <div>
-          <label class="block text-sm font-medium mb-2">카카오 봇 id</label>
+        <div class="border-t-4 pt-4">
+          <label class="block text-xl font-bold mb-2">카카오 봇 id</label>
           <input
             type="text"
             value={kakaoBotId.value}
@@ -139,9 +139,9 @@ export default function CharacterEditor({ id, character }: { id: string, charact
         </div>
 
         {/* 아바타 이미지 업로드 */}
-        <div>
-          <label class="block text-sm font-medium mb-2">아바타 이미지</label>
-          <div class="flex items-center space-x-4">
+        <div class="space-y-4 border-t-4 pt-4">
+          <div class="flex items-center justify-between space-x-4">
+            <label class="block text-xl font-bold mb-2">아바타 이미지</label>
             <input
               type="file"
               accept="image/*"
@@ -151,20 +151,20 @@ export default function CharacterEditor({ id, character }: { id: string, charact
             />
             <label
               for="thumbnail-upload"
-              class="flex items-center px-4 py-2 border rounded cursor-pointer hover:bg-gray-50"
+              class="flex items-center px-4 py-2 border rounded cursor-pointer text-blue-600 hover:text-blue-700"
             >
-              파일 선택
+              +
             </label>
-            {avatarUrl.value.length > 0 && (
-              <img src={avatarUrl.value} alt="이미지 미리보기" class="w-24 h-24 object-cover rounded" />
-            )}
           </div>
+          {avatarUrl.value.length > 0 && (
+              <img src={avatarUrl.value} alt="이미지 미리보기" class="w-full h-48 object-contain rounded" />
+            )}
         </div>
 
         {/* 작은 아바타 이미지 업로드 */}
-        <div>
-          <label class="block text-sm font-medium mb-2">작은 이미지</label>
-          <div class="flex items-center space-x-4">
+        <div class="space-y-4 border-t-4 pt-4">
+          <div class="flex items-center justify-between space-x-4">
+            <label class="block text-xl font-bold mb-2">작은 이미지</label>
             <input
               type="file"
               accept="image/*"
@@ -174,14 +174,14 @@ export default function CharacterEditor({ id, character }: { id: string, charact
             />
             <label
               for="ending-upload"
-              class="flex items-center px-4 py-2 border rounded cursor-pointer hover:bg-gray-50"
+              class="flex items-center px-4 py-2 border rounded cursor-pointer text-blue-600 hover:text-blue-700"
             >
-              파일 선택
+              +
             </label>
-            {smallAvatarUrl.value.length > 0 && (
-              <img src={smallAvatarUrl.value} alt="작은 이미지 미리보기" class="w-24 h-24 object-cover rounded" />
-            )}
           </div>
+            {smallAvatarUrl.value.length > 0 && (
+              <img src={smallAvatarUrl.value} alt="작은 이미지 미리보기" class="w-96 h-48 object-contain rounded" />
+            )}
         </div>
 
         {/* 저장 버튼 추가 */}

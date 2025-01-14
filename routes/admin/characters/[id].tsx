@@ -23,7 +23,7 @@ export default defineRoute(async (_req, ctx) => {
     const { data } = await supabase
       .from('characters')
       .select('*')
-      .eq('id', ctx.params.id)
+      .eq('id', parseInt(ctx.params.id))
       .single();
     if (data) character = data as unknown as Character;
   }
