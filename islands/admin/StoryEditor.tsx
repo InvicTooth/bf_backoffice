@@ -330,16 +330,16 @@ export default function StoryEditor(
                             textIndex,
                             (e.target as HTMLTextAreaElement).value,
                           )}
-                        class="flex-grow p-2 border rounded w-96"
+                        class="p-2 border rounded w-96"
                         rows={3}
                       />
-                      <button
+                      {textIndex != 0 && (<button
                         onClick={() =>
                           removeSceneText(sceneIndex, textIndex)}
                         class="text-red-600 hover:text-red-700 border rounded px-4 py-2"
                       >
                         x
-                      </button>
+                      </button>)}
                     </div>
                   ))}
                 </div>
