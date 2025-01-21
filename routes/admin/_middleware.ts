@@ -17,7 +17,7 @@ export function handler(
   }
 
   const user = ctx.state.session.user;
-  if ((user.email != 'pjhkaka@gmail.com') && (user.email != '0lovedodam0@gmail.com')) {
+  if ((user.email != 'pjhkaka@gmail.com')) {
     return new Response(null, {
       status: 303,
       headers,
